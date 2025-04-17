@@ -50,7 +50,7 @@ export const registerUser = async (req, res) => {
       email,
       'Verify Your Email Address',
       'verifyEmail',
-      { username, email, tokenResult }
+      { username, verificationUrl, email }
     );
 
     if (!emailSent) {
