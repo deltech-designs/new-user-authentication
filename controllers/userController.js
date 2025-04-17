@@ -7,15 +7,15 @@ import jwt from 'jsonwebtoken';
 // REGISTER USER
 export const registerUser = async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const { fullname, email, password } = req.body;
 
-    if (!username || !email || !password) {
+    if (!fullname || !email || !password) {
       return res
         .status(400)
         .json({ message: 'Username, email, and password are required' });
     }
 
-    const existingUser = await User.findOne({ $or: [{ email }, { username }] });
+    const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res
         .status(400)
@@ -23,7 +23,7 @@ export const registerUser = async (req, res) => {
     }
 
     const newUser = new User({
-      username,
+      fullname,
       email,
       password,
       isVerified: false,
@@ -50,7 +50,7 @@ export const registerUser = async (req, res) => {
       email,
       'Verify Your Email Address',
       'verifyEmail',
-      { username, verificationUrl, email }
+      { fullname, verificationUrl, email }
     );
 
     if (!emailSent) {
@@ -65,7 +65,7 @@ export const registerUser = async (req, res) => {
         'User registered successfully. Please check your email for verification.',
       user: {
         id: newUser._id,
-        username: newUser.username,
+        fullname: newUser.fullname,
         email: newUser.email,
         isVerified: newUser.isVerified,
         createdAt: newUser.createdAt,
