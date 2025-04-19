@@ -262,3 +262,57 @@ export const loginUser = async (req, res) => {
     });
   }
 };
+
+// LOGOUT USER (stateless JWT version)
+export const logoutUser = async (req, res) => {
+  try {
+    // Since we are using JWT, there's nothing to invalidate on the server side.
+    // The client should handle removing the token from storage or cookies.
+
+    // If using cookies for JWT, you can clear the cookie:
+    res.clearCookie('token', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // Make sure this is secure in production
+      sameSite: 'Strict', // Prevents cross-site request forgery
+    });
+
+    // Send a response to notify the client to also remove the token from localStorage/sessionStorage if used.
+    return res.status(200).json({
+      message: 'Logout successful.',
+    });
+  } catch (error) {
+    console.error('Logout error:', error);
+    return res.status(500).json({
+      message: 'Error logging out',
+      error: error.message || 'Unknown error',
+    });
+  }
+};
+
+export const getUserProfile = async (req, res) => {
+  try {
+    const { id: userId } = req.user; // Assuming you have a middleware that sets req.user with the authenticated user's info
+
+    const user = await User.findById(userId).select('-password'); // Exclude password from the response
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json({
+      user: {
+        id: user._id,
+        fullname: user.fullname,
+        email: user.email,
+        isVerified: user.isVerified,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+      },
+    });
+  } catch (error) {
+    console.error('Get user profile error:', error);
+    res.status(500).json({
+      message: 'Error fetching user profile',
+      error: error.message || 'Unknown error',
+    });
+  }
+};
