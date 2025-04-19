@@ -3,7 +3,10 @@ import { persist } from 'zustand/middleware';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
-const API_URL = 'http://localhost:3000';
+const API_URL =
+  process.env.NODE_ENV === 'production'
+    ? 'https://user-authentication-2nh5.onrender.com'
+    : 'http://localhost:3000';
 
 const useAuthStore = create(
   persist(
@@ -112,10 +115,12 @@ const useAuthStore = create(
             error: errorMessage,
           });
           toast.error(errorMessage);
-          return error.response || {
-            status: 500,
-            data: { message: errorMessage },
-          };
+          return (
+            error.response || {
+              status: 500,
+              data: { message: errorMessage },
+            }
+          );
         }
       },
 
@@ -207,7 +212,9 @@ const useAuthStore = create(
           );
           const data = response.data;
           set({ isLoading: false, error: null });
-          toast.success(data.message || 'Verification email resent successfully!');
+          toast.success(
+            data.message || 'Verification email resent successfully!'
+          );
           return { success: true };
         } catch (error) {
           const errorMessage =
@@ -227,7 +234,7 @@ const useAuthStore = create(
         }
         set({ isLoading: true, error: null });
         try {
-          const response = await axios.get(`${API_URL}/api/users/me`, {
+          const response = await axios.get(`${API_URL}/api/v1/auth/profile`, {
             headers: { Authorization: `Bearer ${token}` },
           });
           const data = response.data;

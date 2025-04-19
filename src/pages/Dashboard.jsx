@@ -1,14 +1,20 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import useAuthStore from '../store/authStore';
 
 function Dashboard() {
-  const { user, logoutUser,  } = useAuthStore();
+  const { user, logoutUser } = useAuthStore();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
     setIsLoggingOut(true);
     await logoutUser();
     setIsLoggingOut(false);
+
+    // Optionally, you can navigate to the login page after logout
+    // navigate('/login');
+
     // No need to navigate, the protected route will handle redirection
   };
 
