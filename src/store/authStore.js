@@ -3,7 +3,7 @@ import { persist } from 'zustand/middleware';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
-const API_URL = 'https://user-authentication-2nh5.onrender.com';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 const useAuthStore = create(
   persist(

@@ -49,7 +49,7 @@ export default function AuthForm() {
     e.preventDefault();
     const { email, password } = loginForm;
 
-    console.log('Login Form Values:', { email, password });
+    // console.log('Login Form Values:', { email, password });
 
     const trimmedEmail = email ? email.trim() : '';
     if (!trimmedEmail || !password) {
