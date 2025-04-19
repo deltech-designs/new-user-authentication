@@ -11,7 +11,10 @@ const PORT = process.env.PORT || 3000;
 
 // Configure CORS to allow specific origins
 const corsOptions = {
-  origin: ['http://localhost:5173'], // Allow your frontend origin
+  origin: [
+    'http://localhost:5173',
+    'https://user-authentication-frontend-three.vercel.app/',
+  ], // Allow your frontend origin
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allowed methods
   allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
   credentials: true, // Allow cookies or auth headers if needed
