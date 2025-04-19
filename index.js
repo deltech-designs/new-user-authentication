@@ -10,17 +10,35 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Configure CORS to allow specific origins
+const prodOrigin = [
+  process.env.FRONTEND_URL,
+  process.env.FRONTEND_URL_3,
+].filter(Boolean);
+// Add localhost origins for development
+// Note: In production, you should not allow localhost origins for security reasons
+const devOrigin = ['http://localhost:5173'];
 const corsOptions = {
-  origin: [
-    'http://localhost:5173',
-    'https://user-authentication-frontend-three.vercel.app/',
-  ], // Allow your frontend origin
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allowed methods
-  allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
-  credentials: true, // Allow cookies or auth headers if needed
+  origin: (origin, callback) => {
+    if (process.env.NODE_ENV === 'production') {
+      if (prodOrigin.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    } else {
+      if (devOrigin.includes(origin) || !origin) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
 };
 
-app.use(cors(corsOptions));
+app.use(cors(corsOptions)); // Enable CORS with the specified options
 
 // Handle preflight requests explicitly
 app.options('*', cors(corsOptions));
