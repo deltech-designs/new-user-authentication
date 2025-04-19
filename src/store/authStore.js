@@ -3,10 +3,7 @@ import { persist } from 'zustand/middleware';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
-const API_URL =
-  process.env.NODE_ENV === 'production'
-    ? 'https://user-authentication-2nh5.onrender.com'
-    : 'http://localhost:3000';
+const API_URL = 'https://user-authentication-2nh5.onrender.com';
 
 const useAuthStore = create(
   persist(
