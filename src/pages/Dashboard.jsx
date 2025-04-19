@@ -13,7 +13,7 @@ function Dashboard() {
     setIsLoggingOut(false);
 
     // Optionally, you can navigate to the login page after logout
-    // navigate('/login');
+    navigate('/login');
 
     // No need to navigate, the protected route will handle redirection
   };
